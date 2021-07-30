@@ -14,8 +14,8 @@ import styled from 'styled-components';
 // }
 
 const Card = styled.section`
-background-image: url("https://www.weathernationtv.com/app/uploads/2018/04/sky-starts.jpg");
 z-index: -1;
+${props => (props.change === true ? `background-image: url("https://www.weathernationtv.com/app/uploads/2018/04/sky-starts.jpg");` : `background-image: url("https://cdn.theatlantic.com/thumbor/qhOK9i-edRINNZdDYuXKeeUb-Iw=/0x0:1600x900/976x549/media/img/mt/2019/12/Nasa/original.gif");` )}
 `;
 
 const Pg= styled.p`
@@ -37,34 +37,42 @@ padding: 5em;
 
 const Image = styled.img`
 width: 100%;
-z-index: 1;
+`;
+
+const DivHeader = styled.div`
+padding: 5em;
+margin: 5em;
+text-align: center;
 `;
 
 const Head1 = styled.h1`
 font-family: Georgia;
 font-size: 60px;
 color: white;
+text-align: center;
 `;
 
 const Head2 = styled.h2`
 font-family: Georgia;
 font-size: 50px;
 color: white;
+
 `;
 
-const DivHeader = styled.div`
-padding: 5em;
-margin: 5em;
-`;
 
 const Imageheader = styled.img`
 width: 40%;
 `;
 
+const Buttonheader = styled.button`
+background-color: Transparent;
+`;
 
 function App() {
 
 const[newpic,setNewpic] = useState({})
+const[clicked, setClicked] = useState(true)
+
 
 useEffect(() =>{
      axios.get("https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY")
@@ -77,15 +85,21 @@ useEffect(() =>{
   },[])
 
   return (
-    <Card className="App">
+    <Card change={clicked} >
   
       <Head1> This is the picture of day {newpic.date}</Head1>
 
-      <DivHeader>
+      <DivHeader >
         <Head2>{newpic.title}</Head2>
-        <Imageheader src = {"https://www.nasa.gov/sites/default/files/thumbnails/image/nasa-logo-web-rgb.png"}/>
+
+        <Buttonheader onClick ={()=>{setClicked(!clicked)}}>
+          <Imageheader src = {"https://www.nasa.gov/sites/default/files/thumbnails/image/nasa-logo-web-rgb.png"}/>
+        </Buttonheader>
+
       </DivHeader>
+
       <Pg>{newpic.explanation}</Pg>
+
       <Imagediv>
         <Image src = {newpic.hdurl}/>
       </Imagediv>
